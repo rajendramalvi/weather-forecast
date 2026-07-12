@@ -1,0 +1,10 @@
+# Docker ignore — keeps the image small and fast
+WeatherForecast/bin/
+WeatherForecast/obj/
+.vs/
+.git/
+*.user
+README.md
+Thumbs.db
+.DS_Store
+*.log
