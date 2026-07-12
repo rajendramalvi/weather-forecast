@@ -1,0 +1,160 @@
+###############################################################
+# .NET 8 / ASP.NET Core / Visual Studio
+###############################################################
+
+# Build Results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+publish/
+artifacts/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# Rider
+*.sln.iml
+
+# Visual Studio Code
+.history/
+
+# Test Results
+[Tt]est[Rr]esult*/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# Uncomment if you don't use PackageReference
+# !packages/build/
+
+# Publish Output
+publish/
+wwwroot/dist/
+wwwroot/lib/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+
+# Bower
+bower_components/
+
+# Sass
+.sass-cache/
+
+# Temp Files
+*.tmp
+*.temp
+*.cache
+*.bak
+*.old
+
+# Logs
+*.log
+
+# Database
+*.mdf
+*.ldf
+
+# SQL LocalDB
+App_Data/*.mdf
+App_Data/*.ldf
+
+# IIS Express
+iisexpress/
+
+# Azure
+PublishProfiles/
+*.publishsettings
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# DotCover
+*.dotCover
+
+# NCrunch
+_NCrunch_*
+*.ncrunch*
+
+# Coverlet
+coverage/
+coverage.json
+
+# Docker
+docker-compose.override.yml
+
+# Environment Files
+.env
+.env.*
+!.env.example
+
+# Certificates
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+
+# Secrets
+secrets.json
+
+# OS Files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Git
+.git/
+.gitmodules
+
+# Generated files
+Generated/
+GeneratedFiles/
+
+# Backup Files
+*.zip
+*.rar
+*.7z
+
+# AI / IDE
+.gemini/history/
+.gemini/cache/
+.gemini/logs/
+
+###############################################################
+# Keep these files
+###############################################################
+
+!.gitignore
+!README.md
+!LICENSE
+!global.json
+!Directory.Build.props
+!Directory.Build.targets
+!NuGet.Config

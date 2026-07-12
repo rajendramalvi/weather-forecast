@@ -1,0 +1,229 @@
+@{
+    ViewData["Title"] = "Weather Forecast";
+}
+
+<div class="d-flex flex-column h-100 p-3 p-md-4 p-lg-5">
+    
+    <!-- Top Area -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center mb-4 top-bar gap-3">
+        <div class="d-flex flex-column">
+            <h1 class="h2 fw-bold text-white mb-0" id="currentCity">Search City</h1>
+            <div class="text-white-50 d-flex gap-3 align-items-center">
+                <span id="currentDate">Mon, 1 Jan</span>
+                <i class="bi bi-dot"></i>
+                <span id="liveClock" class="fw-semibold text-white">00:00</span>
+            </div>
+        </div>
+        
+        <div class="d-flex gap-3 align-items-center flex-grow-1 flex-md-grow-0 justify-content-end">
+            <div class="input-group search-box position-relative rounded-pill">
+                <span class="input-group-text bg-transparent border-0 text-white ps-4">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="cityInput" class="form-control bg-transparent border-0 text-white placeholder-white shadow-none" placeholder="Search city..." autocomplete="off">
+                <div id="suggestionsBox" class="suggestions-container d-none text-start">
+                    <!-- Suggestions -->
+                </div>
+            </div>
+
+            <!-- Notification Dropdown -->
+            <div class="dropdown d-none d-sm-flex">
+                <button class="btn btn-glass rounded-circle p-2 position-relative" type="button" id="bellDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                    <i class="bi bi-bell fs-5 text-white"></i>
+                    <span id="bellBadge" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none">
+                        <span class="visually-hidden">New alerts</span>
+                    </span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark glass-panel-inner mt-2 p-2 shadow-lg" aria-labelledby="bellDropdown" style="width: 300px;">
+                    <li class="dropdown-header text-white-50">Weather Alerts</li>
+                    <li id="notificationItem"><span class="dropdown-item text-white">No new notifications</span></li>
+                </ul>
+            </div>
+
+            <!-- Settings Trigger -->
+            <button class="btn btn-glass rounded-circle p-2 d-none d-sm-flex ms-2" data-bs-toggle="modal" data-bs-target="#settingsModal" aria-label="Settings">
+                <i class="bi bi-gear fs-5 text-white"></i>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow-1 row g-4">
+        
+        <!-- Center Area (Hero Weather Card) -->
+        <div class="col-12 col-xl-5">
+            <div class="hero-card glass-panel h-100 p-4 p-md-5 text-white d-flex flex-column justify-content-between position-relative overflow-hidden hover-float">
+                <div id="loadingSpinner" class="position-absolute top-50 start-50 translate-middle d-none z-3">
+                    <div class="spinner-border text-white" style="width: 3rem; height: 3rem;" role="status"></div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <div class="display-1 fw-bold tracking-tight lh-1 mb-2" id="temperature">--&deg;</div>
+                        <div class="fs-4 fw-medium opacity-75">Feels like <span id="feelsLike">--&deg;</span></div>
+                    </div>
+                    <div class="weather-icon-container" id="weatherIcon">
+                        <!-- Dynamic Animated SVG Icon -->
+                        <i class="bi bi-cloud-sun display-3 text-white"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="h3 fw-semibold mb-1" id="weatherCondition">Ready</h2>
+                    <p class="opacity-75 mb-4 text-capitalize" id="weatherConditionDesc">Search for a location</p>
+                </div>
+                
+                <!-- Hourly Temperature Graph -->
+                <div class="mb-4 w-100" style="height: 150px;">
+                    <canvas id="hourlyGraph"></canvas>
+                </div>
+                
+                <div class="row g-3 stats-grid">
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-droplet me-2"></i>Humidity</div>
+                            <div class="stat-value" id="humidity">--%</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-wind me-2"></i>Wind</div>
+                            <div class="stat-value" id="wind">-- km/h</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-speedometer2 me-2"></i>Pressure</div>
+                            <div class="stat-value" id="pressure">-- hPa</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-eye me-2"></i>Visibility</div>
+                            <div class="stat-value" id="visibility">-- km</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-sun me-2"></i>UV Index</div>
+                            <div class="stat-value" id="uvIndex">--</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="stat-item p-3 glass-panel-inner rounded-3 hover-lift">
+                            <div class="stat-label"><i class="bi bi-lungs me-2"></i>AQI</div>
+                            <div class="stat-value" id="aqi">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Area (Forecasts) -->
+        <div class="col-12 col-xl-7 d-flex flex-column gap-4">
+            
+            <!-- AI Assistant Panel -->
+            <div class="glass-panel p-4 text-white d-flex flex-column flex-sm-row align-items-center gap-4 hover-float position-relative overflow-hidden" id="aiAssistantPanel">
+                <div class="rounded-circle p-2 d-flex justify-content-center align-items-center bg-white bg-opacity-10 shadow-lg" style="width: 80px; height: 80px; min-width: 80px;" id="aiAvatarContainer">
+                    <i class="bi bi-robot display-5 text-white"></i>
+                </div>
+                <div class="text-center text-sm-start z-1">
+                    <h3 class="h5 fw-bold mb-1">Weather Assistant</h3>
+                    <p class="mb-2 opacity-75" id="aiWeatherStory">Hi! I'm analyzing the latest weather data for you...</p>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start gap-2 mt-2">
+                        <i class="bi bi-bag-check text-warning"></i>
+                        <span class="small fw-semibold text-warning" id="aiOutfitSuggestion">Getting outfit recommendations...</span>
+                    </div>
+                </div>
+                <!-- Subtle glow effect in the background -->
+                <div class="position-absolute top-50 end-0 translate-middle-y rounded-circle bg-primary opacity-25" style="width: 200px; height: 200px; filter: blur(50px); pointer-events: none;"></div>
+            </div>
+
+            <!-- Hourly Forecast -->
+            <div class="glass-panel p-4 text-white">
+                <h3 class="h5 fw-semibold mb-4 d-flex align-items-center"><i class="bi bi-clock-history me-2"></i> Today's Forecast</h3>
+                <div class="hourly-container d-flex gap-3 overflow-auto pb-3 custom-scrollbar" id="hourlyForecast">
+                    <!-- Hourly items injected here -->
+                    <div class="text-white-50">Search for a city to see the forecast.</div>
+                </div>
+            </div>
+
+            <div class="row g-4 flex-grow-1">
+                <!-- 7 Day Forecast -->
+                <div class="col-12 col-md-8">
+                    <div class="glass-panel p-4 text-white h-100">
+                        <h3 class="h5 fw-semibold mb-4 d-flex align-items-center"><i class="bi bi-calendar-week me-2"></i> 7-Day Forecast</h3>
+                        <div class="weekly-container d-flex flex-column gap-2" id="weeklyForecast">
+                            <!-- Weekly items injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sun Stats -->
+                <div class="col-12 col-md-4">
+                    <div class="glass-panel p-4 text-white h-100 d-flex flex-column justify-content-center">
+                        <div class="mb-4 text-center hover-scale">
+                            <i class="bi bi-sunrise display-4 text-warning mb-2"></i>
+                            <div class="opacity-75 small text-uppercase">Sunrise</div>
+                            <div class="fs-4 fw-semibold" id="sunriseTime">--:--</div>
+                        </div>
+                        <hr class="border-white opacity-25 w-75 mx-auto my-0">
+                        <div class="mt-4 text-center hover-scale">
+                            <i class="bi bi-sunset display-4 text-warning mb-2"></i>
+                            <div class="opacity-75 small text-uppercase">Sunset</div>
+                            <div class="fs-4 fw-semibold" id="sunsetTime">--:--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel text-white border-0">
+            <div class="modal-header border-bottom border-secondary border-opacity-50">
+                <h5 class="modal-title fw-bold" id="settingsModalLabel"><i class="bi bi-gear-fill me-2"></i> Settings</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-white-50 text-uppercase small tracking-wide">Temperature Unit</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tempUnit" id="unitC" value="C" checked>
+                            <label class="form-check-label" for="unitC">Celsius (&deg;C)</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tempUnit" id="unitF" value="F">
+                            <label class="form-check-label" for="unitF">Fahrenheit (&deg;F)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-white-50 text-uppercase small tracking-wide">Time Format</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="timeFormat" id="time12" value="12h">
+                            <label class="form-check-label" for="time12">12-hour (AM/PM)</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="timeFormat" id="time24" value="24h" checked>
+                            <label class="form-check-label" for="time24">24-hour</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top border-secondary border-opacity-50">
+                <button type="button" class="btn btn-glass px-4" data-bs-dismiss="modal" id="saveSettingsBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

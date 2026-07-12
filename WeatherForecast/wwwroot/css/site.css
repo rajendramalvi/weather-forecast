@@ -1,0 +1,212 @@
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    
+    --glass-dark-bg: rgba(0, 0, 0, 0.25);
+    --glass-dark-border: rgba(255, 255, 255, 0.1);
+    
+    --theme-color: #ffffff;
+}
+
+body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+    background: #111;
+}
+
+/* Base structural styles */
+.app-container {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Glassmorphism */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: var(--glass-shadow);
+    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.glass-panel-inner {
+    background: var(--glass-dark-bg);
+    border: 1px solid var(--glass-dark-border);
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.btn-glass {
+   /* background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);*/
+}
+
+.btn-glass:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Top Bar */
+.top-bar {
+    position: relative;
+    z-index: 2000;
+}
+
+/* Search Box */
+.search-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    min-width: 250px;
+    transition: all 0.3s ease;
+    z-index: 1050;
+}
+
+.search-box:focus-within {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.search-box input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Suggestions Dropdown */
+.suggestions-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 10px;
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    z-index: 1050;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 99999;
+}
+
+.suggestion-item {
+    padding: 12px 20px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Micro Animations */
+.hover-float {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+.hover-float:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+}
+
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s ease, border-color 0.3s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.hover-scale {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.hover-scale:hover {
+    transform: scale(1.08);
+}
+
+/* AI Assistant Pulsing Animation */
+@keyframes softPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+#aiAvatarContainer {
+    animation: softPulse 3s infinite ease-in-out;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+/* Stats styling */
+.stat-label {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Forecast Items */
+.hourly-item {
+    min-width: 80px;
+    text-align: center;
+}
+
+.weekly-item {
+    transition: background 0.3s ease;
+}
+.weekly-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.weather-icon-container {
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+}
+
+.modal-backdrop {
+    z-index: 1 !important;
+}
